@@ -1,0 +1,20 @@
+﻿  pch.cpp
+  DLLGame.cpp
+C:\Users\ikata\Desktop\ProgrammForDLL\DllGame\DLLGame.h(122,38): warning C4251: Boss::lastShootTime: class "std::chrono::time_point<std::chrono::steady_clock,std::chrono::nanoseconds>" должен иметь dll-интерфейс для использования клиентами class "Boss"
+  (компиляция исходного файла "/DLLGame.cpp")
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\__msvc_chrono.hpp(190,11):
+   см. объявление "std::chrono::time_point<std::chrono::steady_clock,std::chrono::nanoseconds>"
+  
+C:\Users\ikata\Desktop\ProgrammForDLL\DllGame\DLLGame.cpp(133,30): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+  (компиляция исходного файла "/DLLGame.cpp")
+  
+C:\Users\ikata\Desktop\ProgrammForDLL\DllGame\DLLGame.cpp(134,30): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+  (компиляция исходного файла "/DLLGame.cpp")
+  
+C:\Users\ikata\Desktop\ProgrammForDLL\DllGame\DLLGame.cpp(241,64): warning C4267: аргумент: преобразование из "size_t" в "int"; возможна потеря данных
+  (компиляция исходного файла "/DLLGame.cpp")
+  
+  dllmain.cpp
+  Создание кода...
+     Создается библиотека C:\Users\ikata\Desktop\ProgrammForDLL\x64\Debug\DllGame.lib и объект C:\Users\ikata\Desktop\ProgrammForDLL\x64\Debug\DllGame.exp
+  DllGame.vcxproj -> C:\Users\ikata\Desktop\ProgrammForDLL\x64\Debug\DllGame.dll

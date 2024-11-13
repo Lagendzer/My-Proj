@@ -1,0 +1,94 @@
+<!DOCTYPE html>  
+<html lang="ru">  
+<head>  
+  <meta charset="UTF-8">  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <title>Aviation manager</title>  
+  <link rel="stylesheet" href="styles.css">  
+</head>  
+<body style="background-image: url('background.jpg');">  
+  <header>  
+    <h1>Aviation manager</h1>  
+
+    <div class="filter"> 
+      <input type="date" id="dateInput" value="2024-05-15"> 
+      
+      <select id="toSelect"> 
+        <option value="all">All Cities</option> 
+        <!-- Опции для выбора города прибытия будут добавлены здесь --> 
+        <option value="Екатеринбург">Екатеринбург</option> 
+		<option value="Краснодар">Краснодар</option> 
+		<option value="Кемерово">Кемерово</option> 
+		<option value="Волгоград">Волгоград</option> 
+		<option value="Сочи">Сочи</option> 
+		<option value="Новосибирск">Новосибирск</option> 
+		<option value="Омск">Омск</option>
+		<option value="Уфа">Уфа</option>
+		<option value="Пермь">Пермь</option>
+		<option value="Воронеж">Воронеж</option>
+		<option value="Томск">Томск</option>
+		<option value="Владивосток">Владивосток</option>
+		<option value="Магадан">Магадан</option>
+		<option value="Петропавловск-Камчатский">Петропавловск-Камчатский</option>
+		<option value="Улан-Удэ">Улан-Удэ</option> 
+        <option value="Санкт-Петербург">Санкт-Петербург</option> 
+        <!-- Добавьте другие города при необходимости --> 
+      </select> 
+      <button onclick="searchFlights()">Search</button>  
+    </div> 
+
+  </header>  
+   
+  <main>  
+    <section class="flight-list">  
+      <h2>Upcoming Flights</h2>  
+      <table id="flightTable">  
+        <thead>  
+          <tr>  
+            <th>Flight</th>  
+            <th>From</th>  
+            <th>To</th>  
+            <th>Departure Date</th>  
+            <th>Departure Time</th>  
+            <th>Arrival Time</th>  
+          </tr>  
+        </thead>  
+        <tbody>  
+          <!-- Flight schedule data will go here -->  
+        </tbody>  
+      </table>  
+      <div class="pagination"> 
+        <button onclick="goToPreviousPage()">Previous</button> 
+        <span id="paginationInfo">Page 1 of 1</span> 
+        <button onclick="goToNextPage()">Next</button> 
+      </div> 
+    </section>  
+  </main>  
+  <footer>  
+    <p>&copy; 2024 Aviation manager</p>  
+  </footer>  
+  
+  <!-- Кнопка "О нас" --> 
+  <button class="about-btn" onclick="openAboutModal()">О нас</button> 
+
+  <!-- Модальное окно "О нас" --> 
+  <div id="aboutModal" class="modal"> 
+    <div class="modal-content"> 
+      <span class="close" onclick="closeAboutModal()">&times;</span> 
+      <h2>О нас</h2> 
+      <p>Мещеряков Олег</p> 
+      <p>Алтунина Арина</p> 
+      <p>Гибадуллин Артём</p> 
+      <p>Кузнецова Вера</p> 
+      <p>Егель Елизавета</p> 
+      <p>Глушко Алина</p> 
+      <p>Мы любим создавать крутые вещи!</p> 
+    </div> 
+  </div> 
+  
+  <script src="script.js"></script>  
+  <script> 
+    // JavaScript код будет добавлен сюда, если необходимо 
+  </script>  
+</body>  
+</html>

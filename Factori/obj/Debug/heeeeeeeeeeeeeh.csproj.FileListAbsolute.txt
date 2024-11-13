@@ -1,0 +1,14 @@
+C:\Users\student\Desktop\heeeeeeeeeeeeeh\bin\Debug\heeeeeeeeeeeeeh.exe.config
+C:\Users\student\Desktop\heeeeeeeeeeeeeh\bin\Debug\heeeeeeeeeeeeeh.exe
+C:\Users\student\Desktop\heeeeeeeeeeeeeh\bin\Debug\heeeeeeeeeeeeeh.pdb
+C:\Users\student\Desktop\heeeeeeeeeeeeeh\obj\Debug\heeeeeeeeeeeeeh.csproj.AssemblyReference.cache
+C:\Users\student\Desktop\heeeeeeeeeeeeeh\obj\Debug\heeeeeeeeeeeeeh.Form1.resources
+C:\Users\student\Desktop\heeeeeeeeeeeeeh\obj\Debug\heeeeeeeeeeeeeh.Form2.resources
+C:\Users\student\Desktop\heeeeeeeeeeeeeh\obj\Debug\heeeeeeeeeeeeeh.Properties.Resources.resources
+C:\Users\student\Desktop\heeeeeeeeeeeeeh\obj\Debug\heeeeeeeeeeeeeh.csproj.GenerateResource.cache
+C:\Users\student\Desktop\heeeeeeeeeeeeeh\obj\Debug\heeeeeeeeeeeeeh.csproj.CoreCompileInputs.cache
+C:\Users\student\Desktop\heeeeeeeeeeeeeh\obj\Debug\heeeeeeeeeeeeeh.exe
+C:\Users\student\Desktop\heeeeeeeeeeeeeh\obj\Debug\heeeeeeeeeeeeeh.pdb
+C:\Users\student\Desktop\heeeeeeeeeeeeeh\obj\Debug\heeeeeeeeeeeeeh.Form3.resources
+C:\Users\student\Desktop\heeeeeeeeeeeeeh\obj\Debug\heeeeeeeeeeeeeh.Form4.resources
+C:\Users\student\Desktop\heeeeeeeeeeeeeh\obj\Debug\heeeeeeeeeeeeeh.Form5.resources
