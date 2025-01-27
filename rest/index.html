@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ресторан Русской Кухни</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <div class="main-page">
+        <!-- Навигация -->
+        <nav class="navbar">
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="menu.html">Топ блюда</a></li>
+                <li><a href="about.html">О нас</a></li>
+            </ul>
+        </nav>
+
+        <!-- Герой секция -->
+        <div class="hero">
+            <h1 class="welcome-text">Добро пожаловать в ресторан русской кухни</h1>
+            <button id="callButton" class="call-btn">Позвонить нам</button>
+        </div>
+        <!-- Блок с описанием ресторана -->
+        <div class="about-restaurant">
+            <p>
+                <strong>О ресторане:</strong> Наш ресторан был основан в 1995 году
+                шеф-поваром Иваном Ивановым. Мы гордимся тем, что сохраняем традиции
+                русской кухни и предлагаем гостям блюда, приготовленные с любовью и
+                по старинным рецептам. Уютная атмосфера и изысканный вкус блюд делают
+                каждое ваше посещение особенным.
+            </p>
+        </div>
+		<div id="callModal" class="modal">
+			<div class="modal-content">
+				<span class="close">&times;</span>
+				<h2>Наш номер телефона</h2>
+				<p><strong>+7 (123) 456-78-90</strong></p>
+				<button id="copyButton">Скопировать номер</button>
+			</div>
+		</div>
+    </div>
+</body>
+</html>
+
+
+

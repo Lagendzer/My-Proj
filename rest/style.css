@@ -1,0 +1,325 @@
+/* Общие стили */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Отключаем скроллинг */
+    height: 100vh; /* Ограничиваем высоту экрана */
+    background: url('ресторан.jpg') no-repeat center center fixed; /* Задний фон */
+    background-size: cover; /* Масштабируем под экран */
+    filter: brightness(1.3); /* Осветление страницы изначально */
+    color: #fff;
+    opacity: 0; /* Для плавного перехода */
+    transition: filter 1s ease-in-out, opacity 1s ease-in-out; /* Плавный переход */
+}
+
+body.fade-in {
+    opacity: 1; /* Плавное появление */
+    filter: brightness(1); /* Уменьшение осветления */
+}
+
+body.fade-out {
+    opacity: 0; /* Плавное исчезновение */
+}
+/* Шапка (Навигация) */
+.navbar {
+    background-color: rgba(139, 0, 0, 0.9); /* Полупрозрачный фон */
+    color: #fff;
+    padding: 10px 20px; /* Сокращённый отступ */
+    position: fixed; /* Закрепляем шапку */
+    top: 0; /* Размещаем её на самом верху */
+    left: 0;
+    width: 100%; /* Ширина на весь экран */
+    z-index: 100; /* Высокий приоритет слоя */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); /* Тень под шапкой */
+}
+
+.navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.navbar ul li {
+    margin: 0 15px; /* Отступы между пунктами меню */
+}
+
+.navbar ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold; /* Немного акцента на пункты меню */
+    transition: color 0.3s;
+}
+
+.navbar ul li a:hover {
+    color: #FFD700; /* Жёлтый цвет при наведении */
+}
+
+
+/* Герой секция */
+.hero {
+    position: relative;
+    text-align: center;
+    height: 60%; /* Высота секции */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Устанавливаем начальное выравнивание */
+    align-items: center;
+    color: #fff;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    padding-top: 100px; /* Поднимаем секцию выше */
+}
+
+/* Приветствие */
+.welcome-text {
+    font-size: 50px; /* Увеличенный шрифт */
+    margin-top: 50px; /* Устанавливаем отступ сверху */
+    margin-bottom: 20px; /* Уменьшаем отступ снизу */
+    font-weight: bold;
+    text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.6);
+}
+
+/* Блок с описанием ресторана */
+.about-restaurant {
+    background-color: rgba(255, 255, 255, 0.9); /* Полупрозрачный белый фон */
+    border-radius: 15px; /* Скруглённые углы */
+    padding: 20px;
+    position: absolute; /* Абсолютное позиционирование */
+    top: 88%; /* Подняли блок ближе к центру */
+    left: 50%;
+    transform: translate(-50%, -50%); /* Центрирование блока */
+    max-width: 800px; /* Ограничиваем ширину */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    color: #333; /* Тёмный текст для контраста */
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+/* Кнопка "Позвонить нам" */
+.call-btn {
+    position: absolute;
+    top: 70px; /* Под шапкой */
+    right: 20px; /* Сдвиг от правого края */
+    background-color: #8B0000;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    z-index: 15; /* Убедимся, что кнопка отображается выше других элементов */
+}
+
+.call-btn:hover {
+    background-color: #A52A2A;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Затемнение фона */
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+    opacity: 0; /* Начальная непрозрачность */
+    transition: opacity 0.5s ease-in-out; /* Плавный переход */
+}
+
+.modal.show {
+    display: flex;
+    opacity: 1; /* Появление модального окна */
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* Тень */
+    max-width: 400px;
+    width: 90%;
+    position: relative; /* Для правильного позиционирования */
+}
+
+.modal-content h2 {
+    font-size: 20px;
+    color: #8B0000;
+    margin-bottom: 10px;
+}
+
+.modal-content p {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.modal-content button {
+    background-color: #8B0000;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.modal-content button:hover {
+    background-color: #A52A2A;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #8B0000;
+    font-weight: bold;
+}
+
+/* Контент */
+.content {
+    margin-top: 1px; /* Отступ для контента под шапкой */
+    padding: 20px;
+    text-align: center;
+}
+
+
+.menu-title {
+    font-size: 45px;
+    margin-bottom: 40px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+}
+
+.menu-items {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px; /* Отступы между блюдами */
+    margin-top: 20px;
+}
+
+.menu-item {
+    background-color: rgba(255, 255, 255, 0.8); /* Полупрозрачный белый фон */
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    padding: 20px;
+    width: 30%;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень для элементов */
+}
+
+.menu-item img.menu-icon {
+    max-width: 80%;
+    height: auto;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    filter: brightness(0.8); /* Затемнение иконок */
+    transition: filter 0.3s ease; /* Плавное осветление при наведении */
+}
+
+.menu-item:hover img.menu-icon {
+    filter: brightness(1); /* Полное осветление при наведении */
+}
+
+.menu-item p {
+    font-size: 18px;
+    color: #333; /* Тёмный текст для контраста */
+    margin: 10px 0;
+}
+
+.menu-item:hover {
+    transform: scale(1.05);
+    background-color: rgba(255, 255, 255, 1); /* Полностью белый фон при наведении */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Страница "О нас" */
+.about-page {
+    height: 100vh; /* Высота на весь экран */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: url('ресторан.jpg') no-repeat center center fixed; /* Задний фон */
+    background-size: cover;
+    color: #fff; /* Цвет текста */
+    text-align: center;
+    overflow: hidden; /* Убираем прокрутку */
+}
+
+/* Заголовок "О нас" */
+.about-title {
+    font-size: 45px;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* Тень для текста */
+}
+
+/* Информация о ресторане */
+.about-info {
+    background-color: rgba(255, 255, 255, 0.9); /* Полупрозрачный белый фон */
+    border-radius: 15px; /* Скруглённые углы */
+    padding: 20px 30px; /* Добавим отступы внутри */
+    width: 80%;
+    max-width: 600px; /* Ограничиваем максимальную ширину */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Тень для блока */
+    text-align: left; /* Выравнивание текста по левому краю */
+    color: #333; /* Цвет текста */
+    font-size: 18px;
+    line-height: 1.8; /* Увеличиваем межстрочный интервал */
+    margin: 20px auto; /* Центрируем блок */
+}
+
+/* Для каждого параграфа внутри блока */
+.about-info p {
+    margin: 10px 0; /* Отступ между строками */
+}
+
+/* Стили для заголовков внутри блока */
+.about-info strong {
+    display: block; /* Каждый заголовок на своей строке */
+    font-size: 20px;
+    margin-bottom: 5px; /* Отступ снизу для разделения */
+    color: #8B0000; /* Красный цвет заголовков */
+}
+
+/* Ссылки внутри блока */
+.about-info a {
+    color: #8B0000; /* Красный цвет ссылок */
+    text-decoration: none; /* Убираем подчёркивание */
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.about-info a:hover {
+    color: #A52A2A; /* Тёмно-красный цвет при наведении */
+}
+
+
+/* Блок с картой */
+.map-container {
+    margin-top: 20px; /* Отступ сверху */
+    border: 2px solid rgba(0, 0, 0, 0.2); /* Рамка вокруг карты */
+    border-radius: 15px; /* Скруглённые углы */
+    overflow: hidden; /* Убираем выходящие элементы */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Тень */
+    max-width: 800px; /* Ограничиваем ширину */
+    margin-left: auto;
+    margin-right: auto;
+}
+
