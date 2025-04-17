@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>ЭкоПлатформа</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>🌍 ЭкоПлатформа</h1>
+  </header>
+
+  <nav>
+    <button class="tablink active" onclick="openTab('pointsTab', this)">Пункты приёма</button>
+    <button class="tablink" onclick="openTab('addPointTab', this)">Добавить пункт</button>
+    <button class="tablink" onclick="openTab('reportsTab', this)">Отчёты</button>
+    <button class="tablink" onclick="openTab('addReportTab', this)">Добавить отчёт</button>
+    <button class="tablink" onclick="openTab('vkladTab', this)">Вклад пользователя</button>
+    <button class="tablink" onclick="openTab('rankingTab', this)">Рейтинговый лист</button>
+  </nav>
+
+  <div id="pointsTab" class="tab active">
+    <h2>📌 Пункты приёма</h2>
+    <div id="points"></div>
+  </div>
+
+  <div id="rankingTab" class="tab">
+    <h2>🏆 Рейтинговый лист</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Место</th>
+          <th>Пользователь</th>
+          <th>Вклад (кг)</th>
+        </tr>
+      </thead>
+      <tbody id="rankingTable"></tbody>
+    </table>
+  </div>
+
+  <div id="addPointTab" class="tab">
+    <h2>➕ Добавить пункт приёма</h2>
+    <input type="text" id="name" placeholder="Название">
+    <input type="text" id="address" placeholder="Адрес">
+    <button onclick="addPoint()">Добавить</button>
+    <span id="message"></span>
+  </div>
+
+  <div id="reportsTab" class="tab">
+    <h2>📋 Все отчёты</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Пользователь</th>
+          <th>Тип отхода</th>
+          <th>Пункт</th>
+          <th>Вес (кг)</th>
+          <th>Дата</th>
+        </tr>
+      </thead>
+      <tbody id="reportTable"></tbody>
+    </table>
+  </div>
+  
+
+  <div id="addReportTab" class="tab">
+    <h2>♻️ Добавить отчёт об утилизации</h2>
+
+    <input type="email" id="userEmail" placeholder="Почта пользователя">
+    <select id="wasteType"></select>
+    <select id="recyclingPoint"></select>
+    <input type="number" id="weight" placeholder="Вес (кг)" step="0.1">
+    <input type="date" id="date">
+    <button onclick="addReport()">Отправить отчёт</button>
+    <span id="reportMessage"></span>
+    <button onclick="openAddWasteTypeModal()">Добавить новый тип отхода</button>
+  </div>
+
+  <div id="vkladTab" class="tab">
+    <h2>🌱 Экологический вклад пользователя</h2>
+    <input type="email" id="vkladEmail" placeholder="Почта пользователя" list="emailList">
+    <datalist id="emailList"></datalist>
+    <button onclick="loadVklad()">Посчитать вклад</button>
+    <p id="vkladResult"></p>
+  </div>
+
+  <footer>
+    <button id="aboutProjectButton" onclick="openAboutProjectModal()">О проекте</button>
+  </footer>
+
+  <!-- Модальное окно для добавления нового типа отхода -->
+  <div id="addWasteTypeModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeAddWasteTypeModal()">&times;</span>
+      <h2>Добавить новый тип отхода</h2>
+      <input type="text" id="newWasteType" placeholder="Название типа отхода">
+      <textarea id="newWasteDescription" placeholder="Описание типа отхода"></textarea>
+      <button onclick="saveNewWasteType()">Сохранить</button>
+    </div>
+  </div>
+
+  <!-- Модальное окно "О проекте" -->
+  <div id="aboutProjectModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeAboutProjectModal()">&times;</span>
+      <h2>О проекте</h2>
+      <p>Этот проект был создан Мещеряковым О.А. из группы ИДБ-22-09 университета МГТУ "СТАНКИН" для улучшения экологии. С помощью платформы можно отслеживать сдачу отходов, учитывать вклад пользователей в очистку планеты и получать достижения!</p>
+    </div>
+  </div>
+  
+<!-- ДОБАВЬ ВМЕСТО блока с <div id="chatModal" ...> и <button ...> -->
+
+<!-- Модальное окно чата -->
+<div id="chatModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="document.getElementById('chatModal').style.display='none'">&times;</span>
+    <h2>💬 Чат с Эко-Ботом</h2>
+    <div id="chatBox" style="height: 200px; overflow-y: auto; background: #222; padding: 10px; margin-bottom: 10px;"></div>
+    <input type="text" id="userMessage" placeholder="Введите сообщение..." style="width: 80%;">
+    <button onclick="sendMessage()">Отправить</button> <!-- ВОТ ЭТА КНОПКА! -->
+  </div>
+</div>
+
+<!-- Кнопка открытия чата -->
+<button style="position: fixed; right: 20px; bottom: 20px; z-index: 999;" onclick="document.getElementById('chatModal').style.display='flex'">💬 Чат</button>
+
+<!-- Добавь в <script> перед закрытием </body> -->
+<script>
+  async function sendMessage() {
+    const input = document.getElementById("userMessage");
+    const chatBox = document.getElementById("chatBox");
+    const message = input.value.trim();
+    if (!message) return;
+
+    chatBox.innerHTML += `<p><strong>Вы:</strong> ${message}</p>`;
+    input.value = "";
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        chatBox.innerHTML += `<p><strong>Бот:</strong> ${data.reply}</p>`;
+      } else {
+        chatBox.innerHTML += `<p><strong>Бот:</strong> Ошибка ответа</p>`;
+      }
+    } catch (err) {
+      chatBox.innerHTML += `<p><strong>Бот:</strong> Ошибка подключения</p>`;
+    }
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  window.sendMessage = sendMessage; // Сделаем глобальной
+</script>
+
+
+  <script>
+    // Открытие вкладок
+    function openTab(tabId, btn) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tablink').forEach(b => b.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    // Функция открытия модальных окон
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      modal.style.display = 'flex';
+    }
+
+    // Функция закрытия модальных окон
+    function closeModal() {
+      document.querySelectorAll('.modal').forEach(modal => {
+        modal.style.display = 'none';
+      });
+    }
+
+    // Открытие модального окна для добавления нового типа отхода
+    function openAddWasteTypeModal() {
+      openModal('addWasteTypeModal');
+    }
+	
+    // Закрытие модального окна для добавления нового типа отхода
+    function closeAddWasteTypeModal() {
+      closeModal();
+    }
+
+    // Открытие модального окна "О проекте"
+    function openAboutProjectModal() {
+      openModal('aboutProjectModal');
+    }
+
+    // Закрытие модального окна "О проекте"
+    function closeAboutProjectModal() {
+      closeModal();
+    }
+
+    // Загрузка и отображение данных
+    async function loadPoints() {
+      const res = await fetch('/api/points');
+      const points = await res.json();
+      const container = document.getElementById('points');
+      const select = document.getElementById('recyclingPoint');
+      container.innerHTML = '';
+      select.innerHTML = '';
+      points.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'point';
+        div.innerHTML = `<strong>${p.Название}</strong><br>${p.Адрес}`;
+        container.appendChild(div);
+
+        const opt = document.createElement('option');
+        opt.value = p.ID;
+        opt.textContent = p.Название;
+        select.appendChild(opt);
+      });
+    }
+
+    async function loadWasteTypes() {
+      const res = await fetch('/api/waste-types');
+      const types = await res.json();
+      const select = document.getElementById('wasteType');
+      select.innerHTML = '';
+      types.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t.ID;
+        opt.textContent = t.Название;
+        select.appendChild(opt);
+      });
+    }
+
+    async function addPoint() {
+      const Название = document.getElementById('name').value;
+      const Адрес = document.getElementById('address').value;
+      const msg = document.getElementById('message');
+
+      if (!Название.trim() || !Адрес.trim()) {
+        msg.textContent = '❌ Пожалуйста, заполните все поля';
+        msg.style.color = 'red';
+        return;
+      }
+
+      const res = await fetch('/api/points', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ Название, Адрес, Широта: null, Долгота: null })
+      });
+
+      if (res.ok) {
+        msg.textContent = '✅ Пункт добавлен!';
+        msg.style.color = '#90ee90';
+        loadPoints();
+      } else {
+        msg.textContent = '❌ Ошибка при добавлении';
+        msg.style.color = 'red';
+      }
+    }
+
+    // Другие функции для отчетов и рейтинга
+
+    async function loadReports() {
+      const res = await fetch('/api/reports');
+      const reports = await res.json();
+      const table = document.getElementById('reportTable');
+      table.innerHTML = '';
+      reports.forEach(r => {
+        const row = document.createElement('tr');
+        row.innerHTML = ` 
+          <td>${r.ID}</td>
+          <td>${r.Почта}</td>
+          <td>${r.Тип_отхода}</td>
+          <td>${r.Пункт}</td>
+          <td>${r.Вес_в_кг}</td>
+          <td>${r.Дата_сдачи.substring(0, 10)}</td>
+        `;
+        table.appendChild(row);
+      });
+    }
+
+    async function loadRanking() {
+      const res = await fetch('/api/ranking');
+      const ranking = await res.json();
+      const table = document.getElementById('rankingTable');
+      table.innerHTML = '';
+      ranking.forEach((user, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${user.Почта}</td>
+          <td>${user.Вклад} кг</td>
+        `;
+        table.appendChild(row);
+      });
+    }
+	async function addReport() {
+      const Почта = document.getElementById('userEmail').value;
+      const Тип_отхода_ID = parseInt(document.getElementById('wasteType').value);
+      const Пункт_ID = parseInt(document.getElementById('recyclingPoint').value);
+      const Вес_в_кг = parseFloat(document.getElementById('weight').value);
+      const Дата_сдачи = document.getElementById('date').value;
+      const msg = document.getElementById('reportMessage');
+
+      const res = await fetch('/api/reports', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ Почта, Тип_отхода_ID, Пункт_ID, Вес_в_кг, Дата_сдачи })
+      });
+
+      if (res.ok) {
+        msg.textContent = '✅ Отчёт отправлен!';
+        msg.style.color = '#90ee90';
+        loadReports();  // Обновляем отчёты
+      } else {
+        msg.textContent = '❌ Ошибка при отправке';
+        msg.style.color = 'red';
+      }
+    }
+
+    // Функция для загрузки вклада пользователя
+    async function loadVklad() {
+      const email = document.getElementById('vkladEmail').value;
+      const res = await fetch(`/api/vklad/${email}`);
+      const data = await res.json();
+      const out = document.getElementById('vkladResult');
+      out.innerHTML = `♻️ Сдано отходов: <strong>${data.вес} кг</strong><br>🏅 Достижение: <strong>${data.достижение}</strong>`;
+    }
+
+    // Функция для загрузки и отображения пунктов
+    async function loadPoints() {
+      const res = await fetch('/api/points');
+      const points = await res.json();
+      const container = document.getElementById('points');
+      const select = document.getElementById('recyclingPoint');
+      container.innerHTML = '';
+      select.innerHTML = '';
+      points.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'point';
+        div.innerHTML = `<strong>${p.Название}</strong><br>${p.Адрес}`;
+        container.appendChild(div);
+
+        const opt = document.createElement('option');
+        opt.value = p.ID;
+        opt.textContent = p.Название;
+        select.appendChild(opt);
+      });
+    }
+
+    // Инициализация страницы
+    loadPoints();
+    setInterval(loadPoints, 5000);  // Обновляем пункты каждые 5 секунд
+
+
+    // Инициализация
+    loadPoints();
+    loadWasteTypes();
+    loadReports();
+    loadRanking();
+    setInterval(loadReports, 5000);  // Обновляем отчёты каждые 5 секунд
+    setInterval(loadRanking, 5000);  // Обновляем рейтинг каждые 5 секунд
+  </script>
+
+</body>
+</html>
