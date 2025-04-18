@@ -222,6 +222,29 @@ document.addEventListener("DOMContentLoaded", function () {
   if (sendBtn) sendBtn.addEventListener('click', sendMessage);
 });
 
+async function saveNewWasteType() {
+  const name = document.getElementById('newWasteName')?.value;
+  const desc = document.getElementById('newWasteDescription')?.value;
+
+  if (!name || !desc) {
+    alert("Заполните все поля для типа отхода");
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/add-waste-type', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ Название: name, Описание: desc })
+    });
+
+    const data = await res.json();
+    alert(data.message || "Тип отхода добавлен");
+  } catch (err) {
+    alert("Ошибка при добавлении типа отхода");
+  }
+}
+
 
 async function loadPoints() {
   const res = await fetch('/api/points');
