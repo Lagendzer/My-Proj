@@ -231,6 +231,10 @@ app.get('/api/search-email/:query', async (req, res) => {
   }
 });
 
+app.get('/check-key', (req, res) => {
+  res.send(`🔑 ${process.env.OPENROUTER_API_KEY}`);
+});
+
 app.get('/api/vklad/:email', async (req, res) => {
   try {
     const email = req.params.email;
