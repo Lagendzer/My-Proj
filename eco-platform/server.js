@@ -306,6 +306,7 @@ app.post('/api/chat', async (req, res) => {
 
 // Запуск сервера
 const PORT = process.env.PORT || 10000;
+console.log("OPENROUTER_API_KEY:", process.env.OPENROUTER_API_KEY);
 app.listen(PORT, () => {
   console.log(`🚀 Сервер запущен на порту ${PORT}`);
 });
