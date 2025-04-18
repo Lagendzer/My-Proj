@@ -278,7 +278,9 @@ app.post('/api/chat', async (req, res) => {
   method: "POST",
   headers: {
     "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
+    "HTTP-Referer": "https://my-proj-jxg4.onrender.com",
+    "X-Title": "EcoPlatform Bot"
   },
   body: JSON.stringify({
     model: "openai/gpt-3.5-turbo",
@@ -288,6 +290,7 @@ app.post('/api/chat', async (req, res) => {
     ]
   })
 });
+
 
 
     const data = await response.json();
