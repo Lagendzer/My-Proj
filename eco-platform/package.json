@@ -1,17 +1,19 @@
 {
   "name": "eco-platform",
   "version": "1.0.0",
-  "description": "Eco Platform backend",
-  "type": "module",
+  "description": "Платформа для учёта и обмена отходов",
   "main": "server.js",
+  "type": "module",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "init-db": "node init-db.js"
   },
+  "keywords": [],
+  "author": "Lagendzer",
+  "license": "ISC",
   "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^16.3.1",
+    "dotenv": "^16.4.5",
     "express": "^4.18.2",
-    "node-fetch": "^3.3.2",
     "pg": "^8.11.3"
   }
 }
