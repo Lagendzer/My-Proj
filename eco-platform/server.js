@@ -305,9 +305,15 @@ app.post('/api/chat', async (req, res) => {
 });
 
 
-res.json({ reply: data.choices[0].message.content });
+ res.json({ reply: data.choices[0].message.content });
+
+  } catch (err) {
+    console.error("Ошибка чата:", err);
+    res.status(500).json({ reply: "Ошибка подключения к нейросети." });
+  }
 });
 
+// Запуск сервера
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Сервер запущен на порту ${PORT}`);
