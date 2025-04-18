@@ -9,7 +9,6 @@ import { fileURLToPath } from 'url';
 config();
 const { Pool } = pkg;
 
-// абсолютный путь (нужен для sendFile)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -18,7 +17,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// PostgreSQL pool
 const pool = new Pool({
   host: process.env.PG_HOST,
   port: process.env.PG_PORT,
@@ -28,12 +26,114 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 });
 
-// Главная страница
+// ======================= Инициализация БД =======================
+async function initDatabase() {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS "Пользователи" (
+        "ID" SERIAL PRIMARY KEY,
+        "Логин" VARCHAR(50),
+        "Почта" VARCHAR(100),
+        "Пароль_хеш" VARCHAR(255),
+        "Дата_регистрации" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TABLE IF NOT EXISTS "Типы_отходов" (
+        "ID" SERIAL PRIMARY KEY,
+        "Название" VARCHAR(100),
+        "Описание" TEXT
+      );
+
+      CREATE TABLE IF NOT EXISTS "Пункты_приема" (
+        "ID" SERIAL PRIMARY KEY,
+        "Название" VARCHAR(150),
+        "Адрес" VARCHAR(255),
+        "Широта" FLOAT,
+        "Долгота" FLOAT
+      );
+
+      CREATE TABLE IF NOT EXISTS "Отчеты" (
+        "ID" SERIAL PRIMARY KEY,
+        "Пользователь_ID" INT REFERENCES "Пользователи"("ID") ON DELETE CASCADE,
+        "Тип_отхода_ID" INT REFERENCES "Типы_отходов"("ID") ON DELETE CASCADE,
+        "Пункт_ID" INT REFERENCES "Пункты_приема"("ID") ON DELETE CASCADE,
+        "Вес_в_кг" DECIMAL(10,2),
+        "Дата_сдачи" DATE
+      );
+
+      CREATE TABLE IF NOT EXISTS "Друзья" (
+        "Пользователь_ID" INT,
+        "Друг_ID" INT,
+        "Дата_добавления" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY ("Пользователь_ID", "Друг_ID"),
+        FOREIGN KEY ("Пользователь_ID") REFERENCES "Пользователи"("ID") ON DELETE CASCADE,
+        FOREIGN KEY ("Друг_ID") REFERENCES "Пользователи"("ID") ON DELETE CASCADE
+      );
+
+      CREATE TABLE IF NOT EXISTS "Достижения" (
+        "ID" SERIAL PRIMARY KEY,
+        "Название" VARCHAR(100),
+        "Описание" TEXT
+      );
+
+      CREATE TABLE IF NOT EXISTS "Достижения_пользователей" (
+        "Пользователь_ID" INT,
+        "Достижение_ID" INT,
+        "Дата_получения" DATE DEFAULT CURRENT_DATE,
+        PRIMARY KEY ("Пользователь_ID", "Достижение_ID"),
+        FOREIGN KEY ("Пользователь_ID") REFERENCES "Пользователи"("ID") ON DELETE CASCADE,
+        FOREIGN KEY ("Достижение_ID") REFERENCES "Достижения"("ID") ON DELETE CASCADE
+      );
+    `);
+
+    const result = await pool.query(`SELECT COUNT(*) FROM "Пользователи"`);
+    if (+result.rows[0].count === 0) {
+      await pool.query(`
+        INSERT INTO "Пользователи" ("Логин", "Почта", "Пароль_хеш") VALUES
+          ('eco_user', 'eco@example.com', 'hash123'),
+          ('greenqueen', 'queen@eco.ru', 'hash456');
+
+        INSERT INTO "Типы_отходов" ("Название", "Описание") VALUES
+          ('Бумага', 'Макулатура и картон'),
+          ('Пластик', 'Бутылки и упаковка');
+
+        INSERT INTO "Пункты_приема" ("Название", "Адрес", "Широта", "Долгота") VALUES
+          ('ЭкоПункт 1', 'ул. Лесная, 10', 55.75, 37.61),
+          ('Зелёный Центр', 'пр. Эко, 25', 55.76, 37.62);
+
+        INSERT INTO "Отчеты" ("Пользователь_ID", "Тип_отхода_ID", "Пункт_ID", "Вес_в_кг", "Дата_сдачи") VALUES
+          (1, 1, 1, 3.5, CURRENT_DATE),
+          (2, 2, 2, 1.2, CURRENT_DATE);
+
+        INSERT INTO "Достижения" ("Название", "Описание") VALUES
+          ('Первый отчёт', 'Сделал первый вклад'),
+          ('Эко-герой', 'Сдал более 3 кг');
+
+        INSERT INTO "Достижения_пользователей" ("Пользователь_ID", "Достижение_ID") VALUES
+          (1, 1),
+          (1, 2),
+          (2, 1);
+
+        INSERT INTO "Друзья" ("Пользователь_ID", "Друг_ID") VALUES
+          (1, 2),
+          (2, 1);
+      `);
+      console.log('✅ База данных инициализирована и заполнена');
+    } else {
+      console.log('ℹ️ Таблицы уже существуют');
+    }
+  } catch (err) {
+    console.error('❌ Ошибка инициализации БД:', err);
+  }
+}
+initDatabase();
+
+// ======================= ТВОЙ BACKEND =======================
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Получение всех пунктов приёма
 app.get('/api/points', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM "Пункты_приема"');
@@ -43,7 +143,6 @@ app.get('/api/points', async (req, res) => {
   }
 });
 
-// Получение координат через OpenStreetMap
 app.get('/api/get-coordinates', async (req, res) => {
   const address = req.query.address;
   if (!address) return res.status(400).json({ message: 'Адрес не указан' });
@@ -60,7 +159,6 @@ app.get('/api/get-coordinates', async (req, res) => {
   }
 });
 
-// Все отчёты
 app.get('/api/reports', async (req, res) => {
   try {
     const query = `
@@ -77,7 +175,6 @@ app.get('/api/reports', async (req, res) => {
   }
 });
 
-// Добавление отчёта
 app.post('/api/reports', async (req, res) => {
   const { Почта, Тип_отхода_ID, Пункт_ID, Вес_в_кг, Дата_сдачи } = req.body;
   try {
@@ -95,7 +192,6 @@ app.post('/api/reports', async (req, res) => {
   }
 });
 
-// Рейтинг
 app.get('/api/ranking', async (req, res) => {
   try {
     const result = await pool.query(`
@@ -111,7 +207,6 @@ app.get('/api/ranking', async (req, res) => {
   }
 });
 
-// Поиск почты
 app.get('/api/search-email/:query', async (req, res) => {
   try {
     const { query } = req.params;
@@ -125,7 +220,6 @@ app.get('/api/search-email/:query', async (req, res) => {
   }
 });
 
-// Вклад пользователя
 app.get('/api/vklad/:email', async (req, res) => {
   try {
     const email = req.params.email;
@@ -148,7 +242,6 @@ app.get('/api/vklad/:email', async (req, res) => {
   }
 });
 
-// Добавление нового типа отхода
 app.post('/api/add-waste-type', async (req, res) => {
   const { Название, Описание } = req.body;
   try {
@@ -162,7 +255,6 @@ app.post('/api/add-waste-type', async (req, res) => {
   }
 });
 
-// Чат с нейросетью через OpenRouter
 app.post('/api/chat', async (req, res) => {
   const { message } = req.body;
   try {
@@ -188,7 +280,6 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
-// Запуск сервера
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Сервер запущен на порту ${PORT}`);
