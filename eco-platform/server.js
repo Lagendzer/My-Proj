@@ -134,6 +134,17 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+// Получение всех типов отходов
+app.get('/api/waste-types', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM "Типы_отходов"');
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ message: 'Ошибка при получении типов отходов' });
+  }
+});
+
+
 app.get('/api/points', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM "Пункты_приема"');
