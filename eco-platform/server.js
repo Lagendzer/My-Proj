@@ -275,15 +275,15 @@ app.post('/api/chat', async (req, res) => {
 
   try {
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
       headers: {
         "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
         "Content-Type": "application/json"
       },
-      method: "POST",
       body: JSON.stringify({
         model: "openai/gpt-3.5-turbo",
         messages: [
-          { role: "system", content: "Ты бот по экологии, утилизации и переработке отходов. Отвечай только по этим темам." },
+          { role: "system", content: "Ты бот по экологии, утилизации и переработке отходов." },
           { role: "user", content: message }
         ]
       })
@@ -297,12 +297,13 @@ app.post('/api/chat', async (req, res) => {
     }
 
     res.json({ reply: data.choices[0].message.content });
-    
+
   } catch (err) {
     console.error("Ошибка чата:", err);
     res.status(500).json({ reply: "Ошибка подключения к нейросети." });
   }
 });
+
 
 // Запуск сервера
 const PORT = process.env.PORT || 10000;
