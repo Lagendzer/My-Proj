@@ -268,10 +268,15 @@ app.post('/api/add-waste-type', async (req, res) => {
 
 app.post('/api/chat', async (req, res) => {
   const { message } = req.body;
+
+  if (!message) {
+    return res.status(400).json({ reply: "Сообщение не указано." });
+  }
+
   try {
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       headers: {
-        "Authorization": "Bearer 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",
+        "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
         "Content-Type": "application/json"
       },
       method: "POST",
@@ -285,10 +290,22 @@ app.post('/api/chat', async (req, res) => {
     });
 
     const data = await response.json();
+
+    if (!data.choices || !data.choices[0]) {
+      console.error("OpenRouter error:", data);
+      return res.status(500).json({ reply: "Ошибка генерации ответа." });
+    }
+
     res.json({ reply: data.choices[0].message.content });
+    
   } catch (err) {
+    console.error("Ошибка чата:", err);
     res.status(500).json({ reply: "Ошибка подключения к нейросети." });
   }
+});
+
+
+res.json({ reply: data.choices[0].message.content });
 });
 
 const PORT = process.env.PORT || 10000;
